@@ -31,3 +31,15 @@ C:\Users\User\Downloads\try 2\try 2\try\Library Management Domain\obj\Debug\net8
 C:\Users\User\Downloads\try 2\try 2\try\Library Management Domain\obj\Debug\net8.0\refint\Library Management Domain.dll
 C:\Users\User\Downloads\try 2\try 2\try\Library Management Domain\obj\Debug\net8.0\Library Management Domain.pdb
 C:\Users\User\Downloads\try 2\try 2\try\Library Management Domain\obj\Debug\net8.0\ref\Library Management Domain.dll
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\bin\Debug\net8.0\Library Management Domain.deps.json
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\bin\Debug\net8.0\Library Management Domain.dll
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\bin\Debug\net8.0\Library Management Domain.pdb
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.AssemblyInfo.cs
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.sourcelink.json
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.dll
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\refint\Library Management Domain.dll
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\Library Management Domain.pdb
+C:\Users\User\source\repos\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\Library Management Domain\obj\Debug\net8.0\ref\Library Management Domain.dll

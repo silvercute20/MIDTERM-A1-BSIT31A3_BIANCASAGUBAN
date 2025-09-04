@@ -37,7 +37,7 @@
                 <dd class="col-sm-8">@Model.Genre</dd>
 
                 <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(m => m.PublishedDate)</dt>
-                <dd class="col-sm-8">@Model.PublishedDate?.ToString("yyyy-MM-dd")</dd>
+                <dd class="col-sm-8">@Model.PublishedDate.ToString("yyyy-MM-dd")</dd>
 
                 <dt class="col-sm-4 fw-semibold">Available Copies</dt>
                 <dd class="col-sm-8">@Model.AvailableCopies / @Model.TotalCopies</dd>
@@ -52,11 +52,5 @@
 </div>
 
 <div class="modal-footer">
-
-    <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn-outline-primary">
-        <i class="bi bi-arrow-left"></i> Close
-    </a>
-    <a asp-action="Edit" asp-route-id="@Model.BookId" class="btn btn-primary">
-        <i class="bi bi-pencil-square"></i> Manage Copies
-    </a>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 </div>

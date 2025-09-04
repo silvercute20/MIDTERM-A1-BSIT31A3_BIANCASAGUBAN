@@ -1,0 +1,165 @@
+﻿@model IEnumerable<Library_Management.Models.AuthorListViewModel>
+
+@{
+    ViewData["Title"] = "Authors";
+}
+
+<h1 class="mb-4 fw-bold d-flex justify-content-between align-items-center">
+    Author List
+    <div>
+        <a href="@Url.Action("Index", "Book")" class="btn btn-outline-primary btn-sm me-2">
+             Books
+        </a>
+        <a href="#archives-section" class="btn btn-outline-secondary btn-sm">
+            Archives
+        </a>
+    </div>
+</h1>
+
+<div class="mb-3">
+    <button class="btn btn-primary" id="btnAddAuthor" data-url="@Url.Action("AddModal", "Author")">
+        Add Author
+    </button>
+</div>
+
+<h4>Active Authors</h4>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    @foreach (var author in Model.Where(a => !a.IsArchived))
+    {
+        <div class="col">
+            <div class="card h-100">
+                <img src="@author.ProfileImageUrl"
+                     class="card-img-top"
+                     alt="@author.Name"
+                     style="height:200px; object-fit:cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@author.Name</h5>
+                    <p class="card-text">
+                        @if (!string.IsNullOrEmpty(author.Biography))
+                        {
+                            @author.Biography
+                        }
+                        else
+                        {
+                            <em>No biography provided.</em>
+                        }
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">Born: @(author.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</small>
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-warning edit-btn"
+                            data-url="@Url.Action("EditModal", "Author", new { id = author.AuthorId })">
+                        Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger delete-btn"
+                            data-id="@author.AuthorId">
+                        Delete
+                    </button>
+                    <button class="btn btn-sm btn-secondary archive-btn"
+                            data-id="@author.AuthorId">
+                        Archive
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h4 id="archives-section" class="mt-5">Archived Authors</h4>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    @foreach (var author in Model.Where(a => a.IsArchived))
+    {
+        <div class="col">
+            <div class="card h-100 border-secondary">
+                <img src="@author.ProfileImageUrl"
+                     class="card-img-top"
+                     alt="@author.Name"
+                     style="height:200px; object-fit:cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@author.Name</h5>
+                    <p class="card-text">
+                        @if (!string.IsNullOrEmpty(author.Biography))
+                        {
+                            @author.Biography
+                        }
+                        else
+                        {
+                            <em>No biography provided.</em>
+                        }
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">Born: @(author.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</small>
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-success restore-btn"
+                            data-id="@author.AuthorId">
+                        Restore
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="authorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on("click", "#btnAddAuthor", function () {
+            var url = $(this).data("url");
+            $("#modalContent").load(url, function () {
+                $("#authorModal").modal("show");
+            });
+        });
+
+        $(document).on("click", ".edit-btn", function () {
+            var url = $(this).data("url");
+            $("#modalContent").load(url, function () {
+                $("#authorModal").modal("show");
+            });
+        });
+
+        $(document).on("submit", "#authorModal form", function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.post(form.attr("action"), form.serialize())
+                .done(function () {
+                    $("#authorModal").modal("hide");
+                    location.reload();
+                })
+                .fail(function () {
+                    alert("Something went wrong. Check your input.");
+                });
+        });
+
+        $(document).on("click", ".delete-btn", function () {
+            var id = $(this).data("id");
+            if (confirm("Are you sure you want to delete this author?")) {
+                $.post('/Author/Delete/' + id)
+                    .done(function () { location.reload(); })
+                    .fail(function () { alert("Error deleting author."); });
+            }
+        });
+
+        $(document).on("click", ".archive-btn", function () {
+            var id = $(this).data("id");
+            $.post('/Author/ToggleArchive/' + id)
+                .done(function () { location.reload(); })
+                .fail(function () { alert("Error archiving author."); });
+        });
+
+        $(document).on("click", ".restore-btn", function () {
+            var id = $(this).data("id");
+            $.post('/Author/ToggleArchive/' + id)
+                .done(function () { location.reload(); })
+                .fail(function () { alert("Error restoring author."); });
+        });
+    </script>
+}

@@ -2,19 +2,15 @@
 {
     public class AddBookViewModel
     {
-        public string? Title { get; set; }
-        public string? ISBN { get; set; }
-        public string? Description { get; set; }
-        public string? Genre { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string ISBN { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Genre { get; set; } = string.Empty;
         public DateTime? PublishedDate { get; set; }
-
-        // BookItem-specific fields
-        public string? CoverImageUrl { get; set; }
-        public string? Condition { get; set; }
-        public string? Source { get; set; }
-
-        // Author-specific fields
-        public string? Author { get; set; }
-        public string? AuthorProfileImageUrl { get; set; }
+        public string AuthorName { get; set; } = string.Empty;
+        public string AuthorProfileImageUrl { get; set; } = string.Empty;
+        public string CoverImageUrl { get; set; } = string.Empty;
+        public string Condition { get; set; } = "New";
+        public string Source { get; set; } = "Purchase";
     }
 }

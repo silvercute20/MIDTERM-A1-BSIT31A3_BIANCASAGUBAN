@@ -1,0 +1,38 @@
+﻿@model Library_Management.Models.EditAuthorViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">@((Model.AuthorId == Guid.Empty) ? "Add Author" : "Edit Author")</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form method="post" asp-action="@(Model.AuthorId == Guid.Empty ? "Add" : "Edit")">
+    <div class="modal-body">
+        <input type="hidden" asp-for="AuthorId" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Biography" class="form-label"></label>
+            <textarea asp-for="Biography" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="BirthDate" class="form-label"></label>
+            <input asp-for="BirthDate" class="form-control" type="date" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ProfileImageUrl" class="form-label"></label>
+            <input asp-for="ProfileImageUrl" class="form-control" />
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">@((Model.AuthorId == Guid.Empty) ? "Add" : "Save changes")</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+</form>
+

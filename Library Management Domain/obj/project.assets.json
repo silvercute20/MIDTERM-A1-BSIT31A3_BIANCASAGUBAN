@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Source\\Repos\\MIDTERM-A1-BSIT31A3_BIANCASAGUBAN\\Library Management Domain\\Library Management Domain.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Source\\Repos\\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\\Library Management Domain\\Library Management Domain.csproj",
       "projectName": "Library Management Domain",
-      "projectPath": "C:\\Users\\User\\Source\\Repos\\MIDTERM-A1-BSIT31A3_BIANCASAGUBAN\\Library Management Domain\\Library Management Domain.csproj",
+      "projectPath": "C:\\Users\\User\\Source\\Repos\\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\\Library Management Domain\\Library Management Domain.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Source\\Repos\\MIDTERM-A1-BSIT31A3_BIANCASAGUBAN\\Library Management Domain\\obj\\",
+      "outputPath": "C:\\Users\\User\\Source\\Repos\\MIDTERM-A1_BSIT31A3_BIANCASAGUBAN\\Library Management Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

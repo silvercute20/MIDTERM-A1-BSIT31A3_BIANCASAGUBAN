@@ -1,0 +1,128 @@
+﻿@model Library_Management.Models.EditBookViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title">Manage Copies - @Model.Title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+    <div class="table-responsive mb-3">
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Cover</th>
+                    <th>Source</th>
+                    <th>Condition</th>
+                    <th>Added Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="copiesTableBody">
+                @if (Model.Copies != null && Model.Copies.Any())
+                {
+                    foreach (var copy in Model.Copies)
+                    {
+                        <tr data-id="@copy.Id" class="@((copy.PulloutDate.HasValue) ? "table-warning" : "")">
+                            <td><img src="@copy.CoverImageUrl" style="width:60px;height:auto;" alt="Cover" /></td>
+                            <td>@copy.Source</td>
+                            <td>@copy.Condition</td>
+                            <td>@($"{copy.AddedDate:yyyy-MM-dd}")</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-warning pullout-btn">Pull Out</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Cover Image URL</label>
+        <input type="text" class="form-control" id="copyCoverUrl" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Source</label>
+        <input type="text" class="form-control" id="copySource" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Condition</label>
+        <input type="text" class="form-control" id="copyCondition" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Added Date</label>
+        <input type="date" class="form-control" id="copyDate" />
+    </div>
+    <button type="button" class="btn btn-primary" id="addCopyBtn">Add Copy</button>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tbody = document.getElementById("copiesTableBody");
+        const addBtn = document.getElementById("addCopyBtn");
+        const coverInput = document.getElementById("copyCoverUrl");
+        const sourceInput = document.getElementById("copySource");
+        const conditionInput = document.getElementById("copyCondition");
+        const dateInput = document.getElementById("copyDate");
+
+        function createPulloutButton() {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "btn btn-sm btn-warning pullout-btn";
+            btn.textContent = "Pull Out";
+            btn.addEventListener("click", function () {
+                currentRow = btn.closest("tr");
+                new bootstrap.Modal(document.getElementById("pulloutModal")).show();
+            });
+            return btn;
+        }
+
+        addBtn.addEventListener("click", function () {
+            const cover = coverInput.value.trim();
+            const source = sourceInput.value.trim();
+            const condition = conditionInput.value.trim();
+            const addedDate = dateInput.value;
+            if (!source || !condition || !addedDate) return;
+
+            const tr = document.createElement("tr");
+            const tdCover = document.createElement("td");
+            if (cover) {
+                const img = document.createElement("img");
+                img.src = cover;
+                img.style.width = "60px";
+                img.style.height = "auto";
+                tdCover.appendChild(img);
+            }
+            tr.appendChild(tdCover);
+
+            const tdSource = document.createElement("td");
+            tdSource.textContent = source;
+            tr.appendChild(tdSource);
+
+            const tdCondition = document.createElement("td");
+            tdCondition.textContent = condition;
+            tr.appendChild(tdCondition);
+
+            const tdDate = document.createElement("td");
+            tdDate.textContent = addedDate;
+            tr.appendChild(tdDate);
+
+            const tdActions = document.createElement("td");
+            tdActions.appendChild(createPulloutButton());
+            tr.appendChild(tdActions);
+
+            tbody.appendChild(tr);
+
+            coverInput.value = '';
+            sourceInput.value = '';
+            conditionInput.value = '';
+            dateInput.value = '';
+        });
+
+        document.querySelectorAll(".pullout-btn").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                currentRow = btn.closest("tr");
+                new bootstrap.Modal(document.getElementById("pulloutModal")).show();
+            });
+        });
+    });
+</script>

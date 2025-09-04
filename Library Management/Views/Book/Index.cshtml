@@ -4,46 +4,68 @@
     ViewData["Title"] = "Books";
 }
 
-<h1 class="mb-4 fw-bold">Book Library</h1>
+<h1 class="mb-4 fw-bold d-flex justify-content-between align-items-center">
+    Book Library
+    <div>
+        <a href="@Url.Action("Index", "Author")" class="btn btn-outline-primary btn-sm me-2">
+            Authors
+        </a>
+        <a href="#archives-section" class="btn btn-outline-secondary btn-sm">
+            Archives
+        </a>
+    </div>
+</h1>
 
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 mb-4">
     <div class="col">
-        <a asp-action="Create" class="card h-100 shadow-sm border-0 d-flex align-items-center justify-content-center text-decoration-none add-card">
+        <a href="javascript:void(0);" onclick="openAddBookModal()" class="card h-100 shadow-sm border-0 d-flex align-items-center justify-content-center text-decoration-none add-card">
             <div class="text-center">
                 <i class="bi bi-plus-circle" style="font-size: 3rem; color: #6c757d;"></i>
                 <p class="mt-2 text-muted">Add Book</p>
             </div>
         </a>
     </div>
+    <div class="col">
+        <a href="javascript:void(0);" onclick="openAddAuthorModal()" class="card h-100 shadow-sm border-0 d-flex align-items-center justify-content-center text-decoration-none add-card">
+            <div class="text-center">
+                <i class="bi bi-person-plus" style="font-size: 3rem; color: #198754;"></i>
+                <p class="mt-2 text-muted">Add Author</p>
+            </div>
+        </a>
+    </div>
+</div>
 
-    @foreach (var book in Model)
+<h2 class="mt-5">Main Library</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+    @foreach (var book in Model.Where(b => !b.IsArchived))
     {
         <div class="col">
             <div class="card book-card h-100 shadow-sm border-0">
-
                 <div class="book-actions">
-                    <a href="javascript:void(0);"
-                                   class="action-btn"
-                                   title="Edit"
-                                   onclick="openEditModal('@book.BookId')">
+                    <a href="javascript:void(0);" class="action-btn edit-btn" data-url="@Url.Action("EditModal", "Book", new { id = book.BookId })">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <a asp-action="Details" asp-route-id="@book.BookId" class="action-btn" title="Details"/>
-
-                    <a asp-action="Delete" asp-route-id="@book.BookId" class="action-btn" title="Delete">
+                    <a asp-action="Details" asp-route-id="@book.BookId" class="action-btn">
+                        <i class="bi bi-info-circle"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="action-btn delete-button" data-id="@book.BookId">
                         <i class="bi bi-trash"></i>
                     </a>
+                    <a href="javascript:void(0);" class="action-btn manage-copies-btn" data-id="@book.BookId">
+                        <i class="bi bi-journal-bookmark"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="action-btn archive-btn" data-id="@book.BookId">
+                        <i class="bi bi-archive"></i>
+                    </a>
                 </div>
-
                 <img src="@book.CoverImageUrl" class="card-img-top" alt="@book.Title" style="height: 200px; object-fit: cover; background-color: silver;">
-
                 <div class="card-body">
                     <h6 class="card-title text-truncate" title="@book.Title">@book.Title</h6>
                     <p class="text-muted mb-1 text-truncate">
                         <strong>Author:</strong> @book.AuthorName
                     </p>
                     <p class="mb-0 small text-secondary">
-                        @book.Genre | Copies: @book.AvailableCopies / @book.TotalCopies
+                        @book.Genre | Copies: <span class="available">@book.AvailableCopies</span> / <span class="total">@book.TotalCopies</span>
                     </p>
                 </div>
             </div>
@@ -51,19 +73,58 @@
     }
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<h2 id="archives-section" class="archives-title mt-5">Archived Books</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 archived-section">
+    @foreach (var book in Model.Where(b => b.IsArchived))
+    {
+        <div class="col">
+            <div class="card book-card h-100 shadow-sm border-0">
+                <div class="book-actions">
+                    <a href="javascript:void(0);" class="action-btn restore-btn" data-id="@book.BookId">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
+                </div>
+                <img src="@book.CoverImageUrl" class="card-img-top" alt="@book.Title" style="height: 200px; object-fit: cover; background-color: silver;">
+                <div class="card-body">
+                    <h6 class="card-title text-truncate" title="@book.Title">@book.Title</h6>
+                    <p class="text-muted mb-1 text-truncate">
+                        <strong>Author:</strong> @book.AuthorName
+                    </p>
+                    <p class="mb-0 small text-secondary">
+                        @book.Genre | Copies: <span class="available">@book.AvailableCopies</span> / <span class="total">@book.TotalCopies</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="pulloutModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Pull Out Book Copy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                ...
+                <div class="mb-3">
+                    <label class="form-label">Pull Out Reason</label>
+                    <input type="text" id="pulloutReason" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pull Out Date</label>
+                    <input type="date" id="pulloutDate" class="form-control" />
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmPulloutBtn">Confirm Pull Out</button>
             </div>
         </div>
     </div>
@@ -71,61 +132,140 @@
 
 @section Scripts {
     <script>
-            function openEditModal(bookId) {
-            fetch(`/Book/EditModal?id=${encodeURIComponent(bookId)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error loading edit form.');
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    document.querySelector('#exampleModal .modal-content').innerHTML = html;
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentRow = null;
 
-                    // Show the Bootstrap modal (v5 API)
-                    let modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                    modal.show();
-                })
-                .catch(error => {
-                    alert(error.message);
-                    console.error(error);
-                });
-        }
+            function registerManageCopiesEvents(modalContent) {
+                const tbody = modalContent.querySelector("#copiesTableBody");
+                const addBtn = modalContent.querySelector("#addCopyBtn");
+                const coverInput = modalContent.querySelector("#copyCoverUrl");
+                const sourceInput = modalContent.querySelector("#copySource");
+                const conditionInput = modalContent.querySelector("#copyCondition");
+                const dateInput = modalContent.querySelector("#copyDate");
 
-        function openDeleteModal(url, title) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (data) {
-                    $('#exampleModal .modal-content').html(data);
-                    $('#exampleModalLabel').text(title);
-                    $('#exampleModal').modal('show');
-                },
-                error: function () {
-                    alert('Error loading details.');
+                function createPulloutButton() {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "btn btn-sm btn-warning pullout-btn";
+                    btn.textContent = "Pull Out";
+                    btn.addEventListener("click", function () {
+                        currentRow = btn.closest("tr");
+                        new bootstrap.Modal(document.getElementById("pulloutModal")).show();
+                    });
+                    return btn;
                 }
-            });
-        }
 
-        document.addEventListener("submit", function (e) {
-            const form = e.target;
-            if (form.matches("#editBookForm")) {
-                e.preventDefault();
-                const formData = new FormData(form);
-                fetch(form.action, {
-                    method: form.method,
-                    body: new URLSearchParams(formData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    location.reload();
-                })
-                .catch(error => {
-                    alert('Error saving changes: ' + error.message);
+                if(addBtn) {
+                    addBtn.addEventListener("click", function () {
+                        const cover = coverInput.value.trim();
+                        const source = sourceInput.value.trim();
+                        const condition = conditionInput.value.trim();
+                        const addedDate = dateInput.value;
+                        if (!source || !condition || !addedDate) return;
+
+                        const tr = document.createElement("tr");
+                        const tdCover = document.createElement("td");
+                        if (cover) {
+                            const img = document.createElement("img");
+                            img.src = cover;
+                            img.style.width = "60px";
+                            img.style.height = "auto";
+                            tdCover.appendChild(img);
+                        }
+                        tr.appendChild(tdCover);
+
+                        const tdSource = document.createElement("td");
+                        tdSource.textContent = source;
+                        tr.appendChild(tdSource);
+
+                        const tdCondition = document.createElement("td");
+                        tdCondition.textContent = condition;
+                        tr.appendChild(tdCondition);
+
+                        const tdDate = document.createElement("td");
+                        tdDate.textContent = addedDate;
+                        tr.appendChild(tdDate);
+
+                        const tdActions = document.createElement("td");
+                        tdActions.appendChild(createPulloutButton());
+                        tr.appendChild(tdActions);
+
+                        tbody.appendChild(tr);
+
+                        coverInput.value = '';
+                        sourceInput.value = '';
+                        conditionInput.value = '';
+                        dateInput.value = '';
+                    });
+                }
+
+                modalContent.querySelectorAll(".pullout-btn").forEach(function(btn) {
+                    btn.addEventListener("click", function() {
+                        currentRow = btn.closest("tr");
+                        new bootstrap.Modal(document.getElementById("pulloutModal")).show();
+                    });
                 });
             }
+
+            function loadModal(url) {
+                fetch(url)
+                    .then(res => res.text())
+                    .then(html => {
+                        const modalContent = document.querySelector('#exampleModal .modal-content');
+                        modalContent.innerHTML = html;
+                        registerManageCopiesEvents(modalContent);
+                        new bootstrap.Modal(document.getElementById('exampleModal')).show();
+                    });
+            }
+
+            document.getElementById("confirmPulloutBtn").addEventListener("click", function () {
+                const reason = document.getElementById("pulloutReason").value.trim();
+                const date = document.getElementById("pulloutDate").value;
+                if (!reason || !date) return;
+                if (currentRow) currentRow.remove();
+                bootstrap.Modal.getInstance(document.getElementById("pulloutModal")).hide();
+                document.getElementById("pulloutReason").value = '';
+                document.getElementById("pulloutDate").value = '';
+            });
+
+            window.openAddBookModal = function() { loadModal('/Book/AddModal'); }
+            window.openAddAuthorModal = function() { loadModal('/Author/AddModal'); }
+
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function () { loadModal(btn.dataset.url); });
+            });
+            document.querySelectorAll('.delete-button').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const bookId = this.getAttribute('data-id');
+                    if (confirm("Are you sure?")) {
+                        fetch(`/Book/Delete/${bookId}`, { method: 'DELETE' })
+                        .then(res => { if(!res.ok) throw new Error('Error'); location.reload(); })
+                        .catch(err => alert(err.message));
+                    }
+                });
+            });
+            document.querySelectorAll('.manage-copies-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const bookId = btn.getAttribute('data-id');
+                    loadModal(`/Book/ManageCopiesModal/${bookId}`);
+                });
+            });
+            document.querySelectorAll('.archive-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const bookId = btn.getAttribute('data-id');
+                    fetch(`/Book/Archive/${bookId}`, { method: 'POST' })
+                        .then(res => { if(!res.ok) throw new Error('Error'); location.reload(); })
+                        .catch(err => alert(err.message));
+                });
+            });
+            document.querySelectorAll('.restore-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const bookId = btn.getAttribute('data-id');
+                    fetch(`/Book/Restore/${bookId}`, { method: 'POST' })
+                        .then(res => { if(!res.ok) throw new Error('Error'); location.reload(); })
+                        .catch(err => alert(err.message));
+                });
+            });
         });
     </script>
 }
